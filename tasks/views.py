@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Tarea
+from .forms import TareaForm
 # Create your views here.
 
 
@@ -12,10 +13,25 @@ def modelando(request):
     context = {"tareas": datosbd}
 
     if request.method == "POST":
-        agregar = request.POST['nombre']
-        nueva_tarea = Tarea(nombre=agregar)
-        nueva_tarea.save()
+        form = TareaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("datatodo")
+    else:
+        form = TareaForm()
 
-        return redirect("datatodo")
-
+    context = {"tareas": datosbd, "form": form}
     return render(request, "tasks/tareas.html", context)
+
+
+def modificando(request, pk):
+    datosdb = Tarea.objects.get(pk=pk)
+    if request.method == "POST":
+        form = TareaForm(request.POST, instance=datosdb)
+        if form.is_valid():
+            form.save()
+            return redirect("datatodo")
+    else:
+        form = TareaForm(instance=datosdb)
+
+    context = {"form": form}

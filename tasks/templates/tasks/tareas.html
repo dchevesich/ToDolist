@@ -1,9 +1,9 @@
+{% extends 'tasks/base.html' %}
 
-
-
+{% block content %}
 <form method="POST">
     {% csrf_token %}
-    <input type="text" name="nombre" placeholder="Nombre de la nueva tarea">
+    {{ form.as_p }}
     <button type="submit">Agregar Tarea</button>
 </form>
 
@@ -11,8 +11,9 @@
 
 <ul>
     {% for task in tareas %}
-        <li>{{ task.nombre }} - {% if task.completa %}Completada{% else %}Pendiente{% endif %}</li>
+        <li>{{ task.nombre }} - {% if task.completo %}Completada{% else %}Pendiente{% endif %}</li>
     {% empty %}
         <li>No hay tareas aún. ¡Agrega una!</li>
     {% endfor %}
 </ul>
+{% endblock %}

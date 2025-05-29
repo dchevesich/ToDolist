@@ -1,0 +1,14 @@
+[MESSAGES CONTROL]
+disable=
+    C0111, # missing-docstring
+    C0114, # missing-module-docstring
+    C0115, # missing-class-docstring
+    C0116, # missing-function-docstring
+    E1101, # no-member (para el error de objects en modelos Django)
+
+[FORMAT]
+max-line-length=120
+
+[MASTER]
+load-plugins=pylint_django
+django-settings-module=todolist.settings 
