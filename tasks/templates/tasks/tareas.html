@@ -1,19 +1,29 @@
-{% extends 'tasks/base.html' %}
-
+{% extends "tasks/base.html" %} {% block title %}Lista de Tareas{% endblock %}
 {% block content %}
+<h2>Agregar Nueva Tarea</h2>
 <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Agregar Tarea</button>
+  {% csrf_token %} {{ form.as_p }} {# Este es el TareaForm para crear nuevas
+  tareas #}
+  <button type="submit">Agregar Tarea</button>
 </form>
 
-<hr> <h2>Tareas Existentes:</h2>
+<hr />
 
+<h2>Tareas Existentes:</h2>
+{% if tareas %}
 <ul>
-    {% for task in tareas %}
-        <li>{{ task.nombre }} - {% if task.completo %}Completada{% else %}Pendiente{% endif %}</li>
-    {% empty %}
-        <li>No hay tareas aún. ¡Agrega una!</li>
-    {% endfor %}
+  {% for tarea_actual in tareas %}
+  <li>
+    {{ tarea_actual.nombre }} - {% if tarea_actual.completo %}
+    <span style="color: green">Completada</span>
+    {% else %}
+    <span style="color: orange">Pendiente</span>
+    {% endif %}
+    <a href="{% url 'modificar_tarea' tarea_actual.pk %}">(Editar)</a>
+    <a href="{% url 'eliminar_tarea' tarea_actual.pk %}">(Eliminar)</a>
+  </li>
+  {% endfor %}
 </ul>
-{% endblock %}
+{% else %}
+<p>No hay tareas aún. ¡Agrega una!</p>
+{% endif %} {% endblock %}

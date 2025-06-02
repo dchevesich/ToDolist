@@ -1,0 +1,10 @@
+{% extends "tasks/base.html" %} {% block title %}Editar Tarea - {{ tarea.nombre
+}}{% endblock %} {% block content %}
+<h2>Editando Tarea: {{ tarea.nombre }}</h2>
+<form method="POST">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">Guardar Cambios</button>
+
+  <a href="{% url 'datatodo' %}">Cancelar y volver a la lista</a>
+</form>
+{% endblock %}
