@@ -1,29 +1,101 @@
-{% extends "tasks/base.html" %} {% block title %}Lista de Tareas{% endblock %}
+{% extends "tasks/base.html" %}
+
+{% block title %}Mi Lista de Tareas{% endblock %}
+
 {% block content %}
-<h2>Agregar Nueva Tarea</h2>
-<form method="POST">
-  {% csrf_token %} {{ form.as_p }} {# Este es el TareaForm para crear nuevas
-  tareas #}
-  <button type="submit">Agregar Tarea</button>
-</form>
 
-<hr />
+{# --- FORMULARIO PARA AGREGAR NUEVA TAREA --- #}
+<div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Agregar Nueva Tarea</h2>
+    
+    <form method="POST" class="space-y-4">
+        {% csrf_token %}
 
-<h2>Tareas Existentes:</h2>
+        {# Muestra errores generales del formulario si los hay #}
+        {% if form.non_field_errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        {# Campo Nombre #}
+        <div>
+            <label for="{{ form.nombre.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">Nombre de la Tarea</label>
+            <input type="text" name="{{ form.nombre.name }}" id="{{ form.nombre.id_for_label }}"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                   placeholder="¿Qué necesitas hacer?" required>
+            {% for error in form.nombre.errors %}<p class="mt-2 text-sm text-red-600">{{ error }}</p>{% endfor %}
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {# Campo Prioridad #}
+            <div>
+                <label for="{{ form.prioridad.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">Prioridad</label>
+                {# Para estilizar un <select> de Django, necesitamos añadirle la clase desde el forms.py, o renderizarlo a mano. #}
+                {# Por ahora, dejamos que Django lo renderice, se verá básico pero funcional. #}
+                {{ form.prioridad }}
+                 {% for error in form.prioridad.errors %}<p class="mt-2 text-sm text-red-600">{{ error }}</p>{% endfor %}
+            </div>
+
+            {# Campo Completo #}
+            <div class="flex items-center pt-5">
+                 {{ form.completo }} {# Esto renderizará el <input type="checkbox"> #}
+                <label for="{{ form.completo.id_for_label }}" class="ms-2 text-sm font-medium text-gray-900">¿Marcar como completada?</label>
+                {% for error in form.completo.errors %}<p class="mt-2 text-sm text-red-600">{{ error }}</p>{% endfor %}
+            </div>
+        </div>
+
+        {# Botón de Envío #}
+        <div>
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+                Agregar Tarea
+            </button>
+        </div>
+    </form>
+</div>
+
+
+{# --- LISTA DE TAREAS EXISTENTES --- #}
+<h2 class="text-2xl font-bold text-gray-800 mb-4">Tareas Existentes:</h2>
+
 {% if tareas %}
-<ul>
-  {% for tarea_actual in tareas %}
-  <li>
-    {{ tarea_actual.nombre }} - {% if tarea_actual.completo %}
-    <span style="color: green">Completada</span>
-    {% else %}
-    <span style="color: orange">Pendiente</span>
-    {% endif %}
-    <a href="{% url 'modificar_tarea' tarea_actual.pk %}">(Editar)</a>
-    <a href="{% url 'eliminar_tarea' tarea_actual.pk %}">(Eliminar)</a>
-  </li>
-  {% endfor %}
-</ul>
+    <ul class="space-y-3"> {# 'space-y-3' añade espacio vertical entre las tarjetas #}
+        {% for tarea_actual in tareas %}
+            <li class="bg-white rounded-lg shadow p-4 flex items-center justify-between">
+                
+                {# Contenedor para la parte izquierda: Nombre y Badges #}
+                <div class="flex items-center gap-3">
+                    <span class="font-semibold {% if tarea_actual.completo %}line-through text-gray-500{% endif %}">
+                        {{ tarea_actual.nombre }}
+                    </span>
+
+                    {# Badge para Prioridad #}
+                    {% if tarea_actual.prioridad == 'alta' %}
+                        <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Alta</span>
+                    {% elif tarea_actual.prioridad == 'media' %}
+                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Media</span>
+                    {% else %}
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Baja</span>
+                    {% endif %}
+                    
+                    {# Badge para Estado Completada #}
+                    {% if tarea_actual.completo %}
+                         <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Completada</span>
+                    {% endif %}
+                </div>
+
+                {# Contenedor para la parte derecha: Enlaces de Acción #}
+                <div class="flex items-center gap-4">
+                    <a href="{% url 'modificar_tarea' tarea_actual.pk %}" class="font-medium text-blue-600 hover:underline">Editar</a>
+                    <a href="{% url 'eliminar_tarea' tarea_actual.pk %}" class="font-medium text-red-600 hover:underline">Eliminar</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
 {% else %}
-<p>No hay tareas aún. ¡Agrega una!</p>
-{% endif %} {% endblock %}
+    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+        <p>No hay tareas aún. ¡Agrega una!</p>
+    </div>
+{% endif %}
+
+{% endblock %}

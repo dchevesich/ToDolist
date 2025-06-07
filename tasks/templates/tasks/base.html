@@ -1,16 +1,33 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base Html</title>
-</head>
-<nav><h1>Nav de base.html</h1></nav>
-<body> 
-    <div class="main-container">
-        {% block content %}
-        {% endblock %}
-    </div>
-</body>
+<html lang="es" class="bg-gray-100">
+  {# Un color de fondo suave para toda la página #}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+
+    <title>{% block title %}Mi To-Do List{% endblock %}</title>
+  </head>
+  <body>
+    {# <-- El body empieza aquí #}
+
+    <nav class="bg-gray-800 text-white shadow-lg">
+      <div class="container mx-auto px-4 py-3">
+        <h1 class="text-xl font-bold">Mis Tareas</h1>
+      </div>
+    </nav>
+
+    <main class="container mx-auto mt-6 px-4">
+      {% block content %} {% endblock %}
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    {% block scripts %} {% endblock %}
+  </body>
 </html>

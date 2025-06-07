@@ -1,14 +1,37 @@
-{% extends "tasks/base.html" %} {% block content %}
-<h2>Confirmar Eliminación</h2>
-<p>
-  ¿Estás seguro de que quieres eliminar la tarea:
-  <strong>"{{ tarea.nombre }}"</strong>?
-</p>
+{% extends "tasks/base.html" %} {% block title %} 
+{% endblock %} 
+{% block content %}
+<div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+  <h2 class="text-2xl font-bold text-gray-800 mb-2">Confirmar Eliminación</h2>
 
-<form method="POST">
-  {# El action vacío envía el POST a la misma URL actual #} {% csrf_token %}
-  <button type="submit" class="btn btn-danger">Sí, Eliminar</button>
-  <a href="{% url 'datatodo' %}" class="btn btn-secondary">Cancelar</a>
-  {# 'datatodo' debe ser el name de tu URL para listar tareas #}
-</form>
+  <p class="text-gray-600 mb-6">
+    ¿Estás seguro de que quieres eliminar permanentemente la tarea:
+    <strong class="font-semibold text-gray-900">"{{ tarea.nombre }}"</strong>?
+  </p>
+
+  <p class="text-sm text-red-600 bg-red-50 p-3 rounded-md mb-6">
+    <strong>Atención:</strong> Esta acción no se puede deshacer.
+  </p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="flex items-center gap-4">
+      {# Botón principal de acción (Eliminar) #}
+      <button
+        type="submit"
+        class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+      >
+        Sí, Eliminar
+      </button>
+
+      {# Enlace secundario (Cancelar) #}
+      <a
+        href="{% url 'datatodo' %}"
+        class="font-medium text-gray-600 hover:text-gray-900 hover:underline"
+      >
+        Cancelar
+      </a>
+    </div>
+  </form>
+</div>
 {% endblock %}
