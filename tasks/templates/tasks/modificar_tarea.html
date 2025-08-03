@@ -1,5 +1,4 @@
-{% extends "tasks/base.html" %} {% block title %}Editar Tarea - {{ tarea.nombre
-}}{% endblock %} {% block content %}
+{% extends "tasks/base.html" %} {% block title %}Editar Tarea {% endblock %} {% block content %}
 <div class="bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto">
   {# Contenedor centrado #}
   <h2 class="text-2xl font-bold text-gray-800 mb-4">Editando Tarea</h2>
@@ -19,11 +18,9 @@
 
     {# Campo Prioridad #}
     <div>
-      <label
-        for="{{ form.prioridad.id_for_label }}"
-        class="block mb-2 text-sm font-medium text-gray-900"
-        >{{ form.prioridad.label }}</label
-      >
+      <label for="{{ form.prioridad.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">
+        {{ form.prioridad.label }}
+      </label>
       {{ form.prioridad }} {% for error in form.prioridad.errors %}
       <p class="mt-2 text-sm text-red-600">{{ error }}</p>
       {% endfor %}

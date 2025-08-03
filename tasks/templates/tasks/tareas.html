@@ -31,8 +31,6 @@
             {# Campo Prioridad #}
             <div>
                 <label for="{{ form.prioridad.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">Prioridad</label>
-                {# Para estilizar un <select> de Django, necesitamos añadirle la clase desde el forms.py, o renderizarlo a mano. #}
-                {# Por ahora, dejamos que Django lo renderice, se verá básico pero funcional. #}
                 {{ form.prioridad }}
                  {% for error in form.prioridad.errors %}<p class="mt-2 text-sm text-red-600">{{ error }}</p>{% endfor %}
             </div>
@@ -59,11 +57,11 @@
 <h2 class="text-2xl font-bold text-gray-800 mb-4">Tareas Existentes:</h2>
 
 {% if tareas %}
-    <ul class="space-y-3"> {# 'space-y-3' añade espacio vertical entre las tarjetas #}
+    <ul class="space-y-3"> 
         {% for tarea_actual in tareas %}
             <li class="bg-white rounded-lg shadow p-4 flex items-center justify-between">
                 
-                {# Contenedor para la parte izquierda: Nombre y Badges #}
+                {# Contenedor para la parte izqui erda: Nombre y Badges #}
                 <div class="flex items-center gap-3">
                     <span class="font-semibold {% if tarea_actual.completo %}line-through text-gray-500{% endif %}">
                         {{ tarea_actual.nombre }}
